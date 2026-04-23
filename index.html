@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Health Assistant — Understand your medical prescriptions with structured schedules, guidance, and medication tracking.">
+  <title>MedAssist AI — Health Prescription Assistant</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">💊</div>
+        <div class="logo-text">
+          <h1>MedAssist AI</h1>
+          <p>Health Assistant</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-label">Navigation</span>
+        <button class="nav-item active" data-screen="upload" id="navUpload">
+          <span class="icon">📋</span> Upload Prescription
+        </button>
+        <button class="nav-item" data-screen="dashboard" id="navDashboard">
+          <span class="icon">📊</span> Result Dashboard
+        </button>
+        <button class="nav-item" data-screen="tracker" id="navTracker">
+          <span class="icon">✅</span> Medication Tracker
+        </button>
+        <button class="nav-item" data-screen="reminders" id="navReminders">
+          <span class="icon">🔔</span> Reminders
+        </button>
+
+        <span class="nav-label">Assistant</span>
+        <button class="nav-item" id="navChatToggle" onclick="toggleChat()">
+          <span class="icon">💬</span> Ask a Question
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="disclaimer-sidebar">
+          <strong>⚠️ Disclaimer</strong><br>
+          This is an AI assistant and not a replacement for a doctor. Always consult your physician.
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()">☰</button>
+        <span class="topbar-title" id="topbarTitle">Upload Prescription</span>
+        <div class="topbar-actions">
+          <span class="topbar-time" id="topbarTime"></span>
+          <div class="status-dot"></div>
+          <span style="font-size:13px;color:var(--text-secondary)">AI Online</span>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <!-- ===== SCREEN 1: UPLOAD / INPUT ===== -->
+        <section class="screen active" id="screen-upload">
+          <div class="screen-inner">
+            <div class="hero-section">
+              <div class="hero-badge">🤖 AI-Powered Prescription Analysis</div>
+              <h2 class="hero-title">Understand Your <span class="gradient-text">Prescription</span></h2>
+              <p class="hero-subtitle">Paste your prescription text or upload an image. Our AI will extract medicines, create schedules, and guide you through your medication plan.</p>
+            </div>
+
+            <div class="upload-grid">
+              <!-- Text Input Card -->
+              <div class="card upload-card">
+                <div class="card-header">
+                  <h3>📝 Enter Prescription</h3>
+                </div>
+                <div class="card-body">
+                  <div class="uiverse-input-group">
+                    <textarea id="prescriptionInput" class="uiverse-textarea" placeholder="Paste your prescription here...&#10;&#10;Example:&#10;Tab Paracetamol 500mg 1-0-1 for 5 days after food&#10;Cap Amoxicillin 500mg 1-1-1 for 7 days after food" rows="8"></textarea>
+                    <div class="input-glow"></div>
+                  </div>
+                  <div class="sample-chips" id="samplePrescriptions"></div>
+                </div>
+              </div>
+
+              <!-- Image Upload Card -->
+              <div class="card upload-card">
+                <div class="card-header">
+                  <h3>📷 Upload Image</h3>
+                </div>
+                <div class="card-body">
+                  <div class="dropzone" id="dropzone">
+                    <div class="dropzone-icon">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </div>
+                    <p class="dropzone-text">Drag & drop prescription image here</p>
+                    <p class="dropzone-subtext">or click to browse (JPG, PNG, PDF)</p>
+                    <input type="file" id="imageUpload" accept="image/*,.pdf" hidden>
+                  </div>
+                  <div id="imagePreview" class="image-preview" style="display:none;">
+                    <img id="previewImg" src="" alt="Prescription preview">
+                    <button class="remove-image-btn" onclick="removeImage()">✕</button>
+                  </div>
+                  <p class="upload-note">📌 Image text extraction is simulated. For best results, type or paste the prescription text.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-bar">
+              <button class="uiverse-btn btn-primary" id="analyzeBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                Analyze Prescription
+              </button>
+              <button class="uiverse-btn btn-ghost" id="clearBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN 2: RESULT DASHBOARD ===== -->
+        <section class="screen" id="screen-dashboard">
+          <div class="screen-inner">
+            <!-- Stats Row -->
+            <div class="stats-grid" id="statsGrid">
+              <div class="stat-card">
+                <div class="stat-label">Total Medicines</div>
+                <div class="stat-value accent" id="statMedicines">0</div>
+                <div class="stat-sub">Prescribed</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Morning Doses</div>
+                <div class="stat-value green" id="statMorning">0</div>
+                <div class="stat-sub">Before noon</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Night Doses</div>
+                <div class="stat-value indigo" id="statNight">0</div>
+                <div class="stat-sub">Before bed</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Condition</div>
+                <div class="stat-value orange stat-condition" id="statCondition">—</div>
+                <div class="stat-sub">Diagnosis</div>
+              </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-grid">
+              <!-- Left Column -->
+              <div class="dashboard-main">
+                <!-- Tabs -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3>📋 Analysis Results</h3>
+                    <div class="tab-nav">
+                      <button class="tab-btn active" data-tab="extracted">Data</button>
+                      <button class="tab-btn" data-tab="schedule">Schedule</button>
+                      <button class="tab-btn" data-tab="instructions">Guide</button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="tab-content active" id="tab-extracted">
+                      <div id="extractedContent">
+                        <div class="empty-state">Analyze a prescription to see results here.</div>
+                      </div>
+                    </div>
+                    <div class="tab-content" id="tab-schedule">
+                      <div id="scheduleContent">
+                        <div class="empty-state">Schedule will appear after analysis.</div>
+                      </div>
+                    </div>
+                    <div class="tab-content" id="tab-instructions">
+                      <div id="instructionsContent">
+                        <div class="empty-state">Instructions will appear after analysis.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Chat -->
+              <div class="dashboard-chat">
+                <div class="card chat-panel">
+                  <div class="card-header">
+                    <h3>💬 Ask Assistant</h3>
+                  </div>
+                  <div class="chat-messages" id="chatMessages"></div>
+                  <div class="chat-suggestions" id="chatSuggestions"></div>
+                  <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask about your prescription...">
+                    <button class="chat-send-btn" id="chatSendBtn">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN 3: TRACKER ===== -->
+        <section class="screen" id="screen-tracker">
+          <div class="screen-inner">
+            <div class="tracker-header">
+              <div>
+                <h2 class="tracker-title">Medication Tracker</h2>
+                <p class="tracker-subtitle">Track your daily medication intake. Mark each dose as taken or missed.</p>
+              </div>
+              <div class="tracker-date-nav">
+                <button class="uiverse-btn btn-ghost btn-sm" id="prevDayBtn">◀ Prev</button>
+                <span class="tracker-date" id="trackerDate"></span>
+                <button class="uiverse-btn btn-ghost btn-sm" id="nextDayBtn">Next ▶</button>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="tracker-progress-card card">
+              <div class="card-body">
+                <div class="progress-header">
+                  <span class="progress-label">Daily Adherence</span>
+                  <span class="progress-value" id="adherencePercent">0%</span>
+                </div>
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" id="adherenceBar" style="width:0%"></div>
+                </div>
+                <div class="progress-stats">
+                  <span class="pstat taken"><span class="pstat-dot dot-green"></span> Taken: <strong id="takenCount">0</strong></span>
+                  <span class="pstat missed"><span class="pstat-dot dot-red"></span> Missed: <strong id="missedCount">0</strong></span>
+                  <span class="pstat pending"><span class="pstat-dot dot-gray"></span> Pending: <strong id="pendingCount">0</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tracker Time Slots -->
+            <div id="trackerSlots" class="tracker-slots">
+              <div class="empty-state">
+                <p>No prescription data yet.</p>
+                <p style="margin-top:8px;">Go to <strong>Upload Prescription</strong> and analyze a prescription first.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== SCREEN 4: REMINDERS ===== -->
+        <section class="screen" id="screen-reminders">
+          <div class="screen-inner">
+            <div class="tracker-header">
+              <div>
+                <h2 class="tracker-title">🔔 Reminders & Notifications</h2>
+                <p class="tracker-subtitle">Set up SMS & Email reminders for your medication schedule.</p>
+              </div>
+            </div>
+
+            <!-- User Profile Card -->
+            <div class="card" style="margin-bottom:20px">
+              <div class="card-header"><h3>👤 Your Details</h3></div>
+              <div class="card-body">
+                <div class="profile-form">
+                  <div class="form-group">
+                    <label class="form-label" for="userName">Full Name</label>
+                    <input type="text" class="form-input" id="userName" placeholder="Dhanraj Rathod">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="userEmail">Email Address</label>
+                    <input type="email" class="form-input" id="userEmail" placeholder="dhanrajrathd13757@gmail.com">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="userPhone">Phone Number</label>
+                    <input type="tel" class="form-input" id="userPhone" placeholder="9980447179">
+                  </div>
+                  <button class="uiverse-btn btn-primary" id="saveProfileBtn">Save & Enable Reminders</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scheduled Reminders -->
+            <div class="card" style="margin-bottom:20px">
+              <div class="card-header">
+                <h3>⏰ Scheduled Reminders</h3>
+                <button class="uiverse-btn btn-ghost btn-sm" id="sendAllRemindersBtn">Send All Now</button>
+              </div>
+              <div class="card-body">
+                <div id="remindersList" class="reminders-list">
+                  <div class="empty-state">Analyze a prescription and save your profile to see reminders.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notification Log -->
+            <div class="card">
+              <div class="card-header">
+                <h3>📨 Notification Log</h3>
+                <button class="uiverse-btn btn-ghost btn-sm" id="clearLogBtn" onclick="clearNotificationLog()">Clear Log</button>
+              </div>
+              <div class="card-body">
+                <div id="notificationLog" class="notification-log">
+                  <div class="empty-state">No notifications sent yet.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="parser.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
