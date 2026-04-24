@@ -379,8 +379,17 @@ function answerQuestion(question, parsedData) {
     }
   }
 
+  // App guide / how to use
+  if (q.includes('how to use') || q.includes('guide') || q.includes('how does this work') || q.includes('what does this app do')) {
+    return `**Here is how to use MedAssist AI:**
+1. **Upload Prescription:** Go to the first tab and type or paste your prescription text (or click a sample). Then click "Analyze Prescription".
+2. **Result Dashboard:** View your automatically generated daily schedule (Morning, Afternoon, Night).
+3. **Medication Tracker:** Check off your medicines as you take them to track your progress.
+4. **Ask Assistant:** You're here! Ask me questions about your medicines, like "When should I take Paracetamol?" or "Do I take this before or after food?"`;
+  }
+
   // General chat support
-  if (q.includes('hello') || q.includes('hi') || q === 'hi' || q.includes('hey') || q.includes('help') || q.includes('how to use') || q.includes('what does this app do')) {
+  if (q.includes('hello') || q.includes('hi') || q === 'hi' || q.includes('hey') || q.includes('help')) {
     if (hasData) {
       return `Hello! 👋 I'm your AI Health Assistant. I have your prescription with **${parsedData.medicines.length} medicine(s)** loaded. You can ask me about timing, food instructions, duration, or what to do if you miss a dose. How can I help?`;
     } else {
