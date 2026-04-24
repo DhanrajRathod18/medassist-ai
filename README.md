@@ -1,8 +1,11 @@
 # 💊 MedAssist AI — Health Prescription Assistant
 
-**[🔴 Live Demo: Click here to open the website directly](https://DhanrajRathod18.github.io/medassist-ai/)**
-
 MedAssist AI is a modern, web-based intelligent health assistant that helps patients easily understand and manage their medical prescriptions. It parses raw prescription text and transforms it into structured, easy-to-follow daily schedules and tracks adherence.
+
+## Links
+
+- **Live Site**: [Open MedAssist AI](https://DhanrajRathod18.github.io/medassist-ai/)
+- **Repository**: [GitHub Project](https://github.com/DhanrajRathod18/medassist-ai)
 
 ## ✨ Features
 
